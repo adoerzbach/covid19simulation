@@ -6,7 +6,7 @@ This project contains a small simulator for epidemic outbreaks and progress.
 
 ### Installation
 
-You just need to install python3 and do a git clone of the repository
+You first need to install python3. Then install numpy using "pip install numpy". Then do a git clone of the repository.
 
 ### Configuration
 
