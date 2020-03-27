@@ -5,7 +5,6 @@ Created on 20 Mar 2020
 '''
 
 import numpy as np
-import json
 
 
 
@@ -198,31 +197,35 @@ def main():
                 [.2,.2],
                 [0.01,0.01]
                 );
-    quarantene_start=10
-    quarantane_end=150
+    quarantine_start=20
+    quarantine_end=120
     forced_infection_end=300
     normal_live_start=400
-    for i in range(1,quarantene_start):
+    for i in range(1,quarantine_start):
         sim.nextday()
     
     sim.R0=np.array([[minimalr0,minimalr0],[minimalr0,2]])
-    for i in range(quarantene_start,quarantane_end):
-        sim.count_infectious=sim.count_infectious+np.array([.2,1])
+    for i in range(quarantine_start,quarantine_end):
+        # This simulates the open boarders and imported infections
+        #sim.count_infectious=sim.count_infectious+np.array([.2,1])
         sim.nextday()
         
     sim.R0=np.array([[minimalr0,minimalr0],[minimalr0,7]])
-    for i in range(quarantane_end,forced_infection_end):
+    for i in range(quarantine_end,forced_infection_end):
+        # This simulates the open boarders and imported infections
         #sim.count_infectious=sim.count_infectious+np.array([.2,1])
         sim.nextday()
     
     sim.R0=np.array([[.7,.7],[.7,2.5]])
     for i in range(forced_infection_end,normal_live_start):
+        # This simulates the open boarders and imported infections
         #sim.count_infectious=sim.count_infectious+np.array([.2,1])
         sim.nextday()
     sim.shere_deaths_hospitalized[0]=.1     
     sim.R0=np.array([[1.5,1.5],[1.5,2.5]])
     for i in range(normal_live_start,1000):
-        sim.count_infectious=sim.count_infectious+np.array([.06,.3])
+        # This simulates the open boarders and imported infections
+        #sim.count_infectious=sim.count_infectious+np.array([.06,1])
         sim.nextday()
         
     print("Max Hospitalization %d after %d days"%(sim.max_hospitalisations,sim.max_day))
@@ -257,18 +260,18 @@ def main():
                 [.2,.2],
                 [0.01,0.01]
                 );
-    quarantene_start=16
-    quarantane_end=90
+    quarantine_start=16
+    quarantine_end=90
     normal_live_start=90
-    for i in range(1,quarantene_start):
+    for i in range(1,quarantine_start):
         sim.nextday()
     
     sim.R0=np.array([[minimalr0,minimalr0],[minimalr0,minimalr0]])
-    for i in range(quarantene_start,quarantane_end):
+    for i in range(quarantine_start,quarantine_end):
         sim.nextday()
          
     sim.R0=np.array([[.5,.5],[.5,.5]])
-    for i in range(quarantane_end,normal_live_start):
+    for i in range(quarantine_end,normal_live_start):
         sim.nextday()
     sim.R0=np.array([[normalr0/2,normalr0/2],[normalr0/2,normalr0/2]])    
     
