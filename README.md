@@ -1,14 +1,14 @@
 # covid19simulation
 
-#H1 Intro
+##  Intro
 
 This project contains a small simulator for epidemic outbreaks and progress.
 
-#H2 Installation
+### Installation
 
 You just need to install python3 and do a git clone of the repository
 
-#H2 Configuration
+### Configuration
 
 The simulation is highly configurable. To understand you first need to take a look at the state diagram which is available as a Open Office Doc in the repo.
 
@@ -22,6 +22,5 @@ If you specify multiple values in each array, these values represent the paramet
 
 The examples included have parameters defined for a simulation of switzerland and the simulation for the wuhan out break of covid 19 with 2 groups of people defined, the index 0 is for people with high risk of dieing, the index 1, for poeple with low risk of dieing.
 
-#H3
 
 
