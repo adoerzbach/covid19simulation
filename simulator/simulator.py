@@ -84,7 +84,6 @@ class simulator:
         self.infectious_factor_hostpitalized=np.array(infectious_factor_hospitalized)
         self.max_hospitalisations=0
         self.day=0
-        self.day=0
         
     def nextday(self):
         healed_hospital=self.count_hostpitalized*(1-self.shere_deaths_hospitalized)/self.time_recover_hospitalized
@@ -123,8 +122,8 @@ class simulator:
         self.day+=1
         
         format=('{"Day":%d,"Infections":%s,"Deaths":%s,"Total Deaths":%s,"Total Infectious People":%s,'+
-               '"Total Immune People:"%s,"Total hospitalized People:"%s,"Total Symptomatic People:"%s'+
-               '"Total Asymptomatic People:"%s,"Total Unifected People:"%s,"Total Population:"%s'
+               '"Total Immune People":%s,"Total hospitalized People":%s,"Total Symptomatic People":%s'+
+               '"Total Asymptomatic People":%s,"Total Unifected People":%s,"Total Population":%s}'
                )
         
         print(format%(self.day,
