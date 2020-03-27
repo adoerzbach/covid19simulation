@@ -19,7 +19,7 @@ class simulator:
                  time_die_hospitalized,
                  time_hostpitalize,
                  time_immunisation,
-                 share_hospitaltions,
+                 share_hospitalizations,
                  share_deaths_symtomatic,
                  shere_deaths_hospitalized,
                  share_asymptomatic,
@@ -35,31 +35,31 @@ class simulator:
                  ):
         
         ''' Todo
-        R0: matrix mit wieviele ansteckende kontakte jeder angesteckte haben wird.
+        R0: matrix with the number of contacts to people which are infecting uninfected people between segments of population
 
-        time_incubation: zeit in der ansteckend ohne symptome
-        time_recover_symtomatic: zeit bis genesung ohne hospitalisation
-        time_recover_hospitalized: zeit bis genesung im spital
-        time_die_symtpomatic: zeit bis zum tod
-        time_die_hospitalized: Zeit von hospitaltisation bis zum Tod.
-        time_hostpitalize: Zeit von symptomen bis zur hospitalisation
-        time_immunisation: Zeit von asymtomatischen faellen bis zur immunitaet
+        time_incubation: time in which poeple are infectious but have no symptoms
+        time_recover_symtomatic: time to recover of poeple show symptoms not hospitalized
+        time_recover_hospitalized: time to recover for poeple hospitalized
+        time_die_symtpomatic: time until death of symptomatic people at home
+        time_die_hospitalized: time until death after hospitalization
+        time_hostpitalize: time between the first symptoms and the hospitalization
+        time_immunisation: time of asymptomatic cases after the start to be infectious until they are immune
 
-        share_hospitaltions: anteil ansteckender personen mit hospitalisation
-        share_deaths_symtomatic: anteil toetlicher Faelle ohne hospitalisation
-        shere_deaths_hospitalized: anteil toetlicher von ansteckenden faellen
-        share_asymptomatic: anteil nicht auffaelliger faelle
-        share_immune: anteil immuner menschen in der anfangs population
+        share_hospitalizations: share of people which have symptoms and are getting hospitalized
+        share_deaths_symtomatic: share of people which die without hospitalization
+        shere_deaths_hospitalized: share of people which die after hospitalization
+        share_asymptomatic: share of people infectious which are not showing symptoms
+        share_immune: share of people which are immune at start of simulation
         
-        count_uninfected: anzahl nicht infiszierte
-        count_infectious: anzahl ansteckende in incumationszeit
-        count_asymptomatic: anzahl ohne symptome
-        count_symptomatic: anzahl mit symtome zuhause
-        count_hostpitalized: anzahl hospitalisierte
-        count_immune: Anzahl immune
-        count_dead: Anzahl Tote
-        infectious_factor_symtomatic: Faktor mit welchem das ansteckungsrisiko gesenkt wird wenn man symptome hat.
-        infectious_factor_hospitalized: Faktor welchem das ansteckungsrisiko gesenkt wird wenn man im Spital ist.
+        count_uninfected: number of not yet infected people
+        count_infectious: number of infectious people during incubation time
+        count_asymptomatic: number of people not showing any symptoms
+        count_symptomatic: number of people with symptoms staying at home 
+        count_hostpitalized: number of people hospitalized
+        count_immune: number of poeple immune
+        count_dead: number of poeple died
+        infectious_factor_symtomatic: factor reducing R0 for people which have symptoms because of self quarantine.
+        infectious_factor_hospitalized: factor reducing R0 for people which have been hospitalized
         '''
         self.R0=np.array(R0)
         self.time_incubation=np.array(time_incubation)
@@ -69,7 +69,7 @@ class simulator:
         self.time_die_hospitalized=np.array(time_die_hospitalized)
         self.time_hostpitalize=np.array(time_hostpitalize)
         self.time_immunisation=np.array(time_immunisation)
-        self.share_hospitaltions=np.array(share_hospitaltions)
+        self.share_hospitalizations=np.array(share_hospitalizations)
         self.share_deaths_symtomatic=np.array(share_deaths_symtomatic)
         self.shere_deaths_hospitalized=np.array(shere_deaths_hospitalized)
         self.share_asymptomatic=np.array(share_asymptomatic)
@@ -92,7 +92,7 @@ class simulator:
         immunized=self.count_asymptomatic/self.time_immunisation
         deaths_symptomatic=self.count_symptomatic*self.share_deaths_symtomatic/self.time_die_symtpomatic
         
-        deaths_hospitalized=self.count_hostpitalized*self.share_hospitaltions/self.time_die_hospitalized
+        deaths_hospitalized=self.count_hostpitalized*self.share_hospitalizations/self.time_die_hospitalized
         
         infections=(self.R0.dot(
             self.count_infectious+self.count_asymptomatic+
@@ -105,7 +105,7 @@ class simulator:
           
         fall_ills=self.count_infectious*(1-self.share_asymptomatic)/self.time_incubation 
         stay_healthies=self.count_infectious*self.share_asymptomatic/self.time_incubation
-        hospitalisations=self.count_symptomatic*self.share_hospitaltions/self.time_hostpitalize
+        hospitalisations=self.count_symptomatic*self.share_hospitalizations/self.time_hostpitalize
         
         
         self.count_dead=self.count_dead+deaths_hospitalized+deaths_symptomatic
@@ -154,7 +154,7 @@ def main():
                  time_hostpitalize,
                  time_immunisation,
     
-                 share_hospitaltions,
+                 share_hospitalizations,
                  share_deaths_symtomatic,
                  shere_deaths_hospitalized,
                  share_asymptomatic,
