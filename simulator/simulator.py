@@ -35,7 +35,7 @@ class simulator:
                  infectious_factor_hospitalized
                  ):
         
-        ''' Prameter Description
+        ''' Parameter Description
         R0: matrix with the number of contacts to people which are infecting uninfected people between segments of population
 
         time_incubation: time in which poeple are infectious but have no symptoms
@@ -290,7 +290,7 @@ def simwuhan():
     start_full_quarantine=16
     # on April 8 or 9 the people can start to go out again
     end_fullquarantine=90
-    # Travelling to and away from Wuhan is allowed again.
+    # Traveling to and away from Wuhan is allowed again.
     normal_live_start=120
     for i in range(1,start_full_quarantine):
         sim.nextday()
@@ -305,7 +305,7 @@ def simwuhan():
     
     sim.R0=np.array([[1.5,1.5],[1.5,2.5]])
     for i in range(normal_live_start,normal_live_start+20):
-        # Import of infections start again, due to travelling
+        # Import of infections start again, due to traveling
         sim.count_infectious=sim.count_infectious+np.array([.2,1])
         sim.nextday()
          
@@ -314,7 +314,7 @@ def simwuhan():
          
 def main():
     simschweiz()
-    simwuhan() 
+    #simwuhan() 
   
     
     
