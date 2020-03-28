@@ -11,6 +11,7 @@ import numpy as np
 class simulator:
     def __init__(self,
                  R0,
+                 
                  time_incubation,
                  time_recover_symtomatic,
                  time_recover_hospitalized,
@@ -18,9 +19,10 @@ class simulator:
                  time_die_hospitalized,
                  time_hostpitalize,
                  time_immunisation,
+    
                  share_hospitalizations,
                  share_deaths_symtomatic,
-                 shere_deaths_hospitalized,
+                 share_deaths_hospitalized,
                  share_asymptomatic,
                  count_uninfected,
                  count_infectious,
@@ -33,7 +35,7 @@ class simulator:
                  infectious_factor_hospitalized
                  ):
         
-        ''' Todo
+        ''' Prameter Description
         R0: matrix with the number of contacts to people which are infecting uninfected people between segments of population
 
         time_incubation: time in which poeple are infectious but have no symptoms
@@ -46,7 +48,7 @@ class simulator:
 
         share_hospitalizations: share of people which have symptoms and are getting hospitalized
         share_deaths_symtomatic: share of people which die without hospitalization
-        shere_deaths_hospitalized: share of people which die after hospitalization
+        share_deaths_hospitalized: share of people which die after hospitalization
         share_asymptomatic: share of people infectious which are not showing symptoms
         share_immune: share of people which are immune at start of simulation
         
@@ -70,7 +72,7 @@ class simulator:
         self.time_immunisation=np.array(time_immunisation)
         self.share_hospitalizations=np.array(share_hospitalizations)
         self.share_deaths_symtomatic=np.array(share_deaths_symtomatic)
-        self.shere_deaths_hospitalized=np.array(shere_deaths_hospitalized)
+        self.share_deaths_hospitalized=np.array(share_deaths_hospitalized)
         self.share_asymptomatic=np.array(share_asymptomatic)
         self.count_uninfected=np.array(count_uninfected)
         self.count_infectious=np.array(count_infectious)
@@ -85,7 +87,7 @@ class simulator:
         self.day=0
         
     def nextday(self):
-        healed_hospital=self.count_hostpitalized*(1-self.shere_deaths_hospitalized)/self.time_recover_hospitalized
+        healed_hospital=self.count_hostpitalized*(1-self.share_deaths_hospitalized)/self.time_recover_hospitalized
         healed_symptomatic=self.count_symptomatic*(1-self.share_deaths_symtomatic)/self.time_recover_symtomatic
         immunized=self.count_asymptomatic/self.time_immunisation
         deaths_symptomatic=self.count_symptomatic*self.share_deaths_symtomatic/self.time_die_symtpomatic
@@ -142,146 +144,173 @@ class simulator:
         #print(json.dumps(self,default=lambda o: o.json()))
         
 def main():
-    '''          R0,
-    
-                 time_incubation,
-                 time_recover_symtomatic,
-                 time_recover_hospitalized,
-                 time_die_symtpomatic,
-                 time_die_hospitalized,
-                 time_hostpitalize,
-                 time_immunisation,
-    
-                 share_hospitalizations,
-                 share_deaths_symtomatic,
-                 shere_deaths_hospitalized,
-                 share_asymptomatic,
-                 
-                 count_uninfected,
-                 count_infectious,
-                 count_asymptomatic,
-                 count_symptomatic,
-                 count_hostpitalized,
-                 count_immune,
-                 count_dead,
-                 
-                 infectious_factor_symtomatic,
-                 infectious_factor_hospitalized
-    '''
     #Schweiz
     minimalr0=0.01
     sim=simulator(
+                # RO
                 [[minimalr0,minimalr0],[minimalr0,minimalr0]],
-                
+                # time_incubation
                 [5.2,5.2],
+                # time_recover_symtomatic
                 [15,15],
+                # time_recover_hospitalized
                 [10.5,10.5],
+                # time_die_symtpomatic
                 [15,15],
+                # time_die_hospitalized
                 [10.5,10.5],
+                # time_hostpitalize
                 [4.5,4.5],
+                # time_immunisation
                 [10,10],
-                
+
+                # share_hospitalizations                
                 [.10,0.001], 
+                # share_deaths_symtomatic
                 [.10,0.0001],
+                # share_deaths_hospitalized
                 [.30,0.0001],
+                # share_asymptomatic
                 [0.5,.5],
-                
+
+                # count_uninfected
                 [1600000,6900000],
+                # count_infectious
                 [10000,30000],
+                # count_asymptomatic
                 [10000,30000],
+                # count_symptomatic
                 [2000,7000],
+                # count_hostpitalized
                 [1450,50],
+                # count_immune
                 [10000,10000],
+                # count_dead
                 [130,0],
                 
+                # infectious_factor_symtomatic,
                 [.2,.2],
+                # infectious_factor_hospitalized
                 [0.01,0.01]
                 );
-    quarantine_start=20
-    quarantine_end=120
-    forced_infection_end=300
+    # End of the full lockdown in days from the beginning of the simulation
+    start_full_quarantine=20
+    # End of the half lockdown (where no risk people start to move again) in days from the beginning of the simulation
+    end_fullquarantine=150
+    # End of the forced infection period for people at no risk in days from the beginning of the simulation
+    forced_infection_end=330
+    # Start of normalized life again in days from the beginning of the simulation
     normal_live_start=400
-    for i in range(1,quarantine_start):
+    # Full Quarantine time.
+    for i in range(1,start_full_quarantine):
         sim.nextday()
     
+    # Partial Quarantine with people at risk locked away
     sim.R0=np.array([[minimalr0,minimalr0],[minimalr0,2]])
-    for i in range(quarantine_start,quarantine_end):
-        # This simulates the open boarders and imported infections
-        #sim.count_infectious=sim.count_infectious+np.array([.2,1])
+    for i in range(start_full_quarantine,end_fullquarantine):
         sim.nextday()
-        
+
+    # Open Scools and shops, but keep people at risk away.    
     sim.R0=np.array([[minimalr0,minimalr0],[minimalr0,7]])
-    for i in range(quarantine_end,forced_infection_end):
-        # This simulates the open boarders and imported infections
-        #sim.count_infectious=sim.count_infectious+np.array([.2,1])
+    for i in range(end_fullquarantine,forced_infection_end):
         sim.nextday()
     
+    # Start of getting people at risk back to normal live
     sim.R0=np.array([[.7,.7],[.7,2.5]])
     for i in range(forced_infection_end,normal_live_start):
-        # This simulates the open boarders and imported infections
-        #sim.count_infectious=sim.count_infectious+np.array([.2,1])
         sim.nextday()
-    sim.shere_deaths_hospitalized[0]=.1     
+
+    
+    # This simulates a better methods of cure in hospitals.
+    sim.share_deaths_hospitalized[0]=.1     
+    # Start of normal live with minor safety precautions of people at risk    
     sim.R0=np.array([[1.5,1.5],[1.5,2.5]])
     for i in range(normal_live_start,1000):
         # This simulates the open boarders and imported infections
-        #sim.count_infectious=sim.count_infectious+np.array([.06,1])
+        # Hopefully the can be kept as low as this, which means only one person infected is
+        # traveling to Switzerland without being caught at the border
+        sim.count_infectious=sim.count_infectious+np.array([1/100,1/7])
         sim.nextday()
         
     print("Max Hospitalization %d after %d days"%(sim.max_hospitalisations,sim.max_day))
-    '''
+    
     #Wuhan
     minimalr0=0.01
     normalr0=3.5
     sim=simulator(
+                # RO
                 [[normalr0,normalr0],[normalr0,normalr0]],
-                
-                [5.2,5.2],
+                # time_incubation
+                [6.4,6.4],
+                # time_recover_symtomatic
                 [15,15],
+                # time_recover_hospitalized
                 [10.5,10.5],
+                # time_die_symtpomatic
                 [15,15],
+                # time_die_hospitalized
                 [10.5,10.5],
+                # time_hostpitalize
                 [4.5,4.5],
+                # time_immunisation
                 [10,10],
-                
+                                
+                # share_hospitalizations,                
                 [.10,0.001], 
+                # share_deaths_symtomatic,
                 [.10,0.0001],
+                # share_deaths_hospitalized,
                 [.30,0.0001],
+                # share_asymptomatic,
                 [0.5,.5],
+
                 
+                # count_uninfected
                 [2600000,8000000],
+                # count_infectious,
                 [200,200],
+                # count_asymptomatic,
                 [200,200],
+                # count_symptomatic,
                 [30,30],
+                # count_hostpitalized,
                 [7,0],
+                # count_immune,
                 [0,0],
+                # count_dead,
                 [130,0],
                 
+                # infectious_factor_symtomatic,
                 [.2,.2],
+                # infectious_factor_hospitalized
                 [0.01,0.01]
                 );
-    quarantine_start=16
-    quarantine_end=90
-    normal_live_start=90
-    for i in range(1,quarantine_start):
+    # on Jan 23, 16 days after the start of the simulation the complete shutdown comes
+    start_full_quarantine=16
+    # on April 8 or 9 the people can start to go out again
+    end_fullquarantine=90
+    # Travelling to and away from Wuhan is allowed again.
+    normal_live_start=120
+    for i in range(1,start_full_quarantine):
         sim.nextday()
     
     sim.R0=np.array([[minimalr0,minimalr0],[minimalr0,minimalr0]])
-    for i in range(quarantine_start,quarantine_end):
+    for i in range(start_full_quarantine,end_fullquarantine):
         sim.nextday()
          
     sim.R0=np.array([[.5,.5],[.5,.5]])
-    for i in range(quarantine_end,normal_live_start):
+    for i in range(end_fullquarantine,normal_live_start):
         sim.nextday()
-    sim.R0=np.array([[normalr0/2,normalr0/2],[normalr0/2,normalr0/2]])    
     
+    sim.R0=np.array([[1.5,1.5],[1.5,2.5]])
     for i in range(normal_live_start,normal_live_start+20):
+        # Import of infections start again, due to travelling
         sim.count_infectious=sim.count_infectious+np.array([.2,1])
         sim.nextday()
          
         
     print("Max Hospitalization %d after %d days"%(sim.max_hospitalisations,sim.max_day))
-    ''' 
+     
     
     
 if __name__ == '__main__':
