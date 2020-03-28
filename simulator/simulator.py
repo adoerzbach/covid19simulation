@@ -142,9 +142,9 @@ class simulator:
         )
         
         #print(json.dumps(self,default=lambda o: o.json()))
-        
-def main():
-    #Schweiz
+
+def simschweiz():
+        #Schweiz
     minimalr0=0.01
     sim=simulator(
                 # RO
@@ -233,8 +233,9 @@ def main():
         sim.nextday()
         
     print("Max Hospitalization %d after %d days"%(sim.max_hospitalisations,sim.max_day))
-    
-    #Wuhan
+
+def simwuhan():  
+        #Wuhan
     minimalr0=0.01
     normalr0=3.5
     sim=simulator(
@@ -310,7 +311,11 @@ def main():
          
         
     print("Max Hospitalization %d after %d days"%(sim.max_hospitalisations,sim.max_day))
-     
+         
+def main():
+    simschweiz()
+    simwuhan() 
+  
     
     
 if __name__ == '__main__':
