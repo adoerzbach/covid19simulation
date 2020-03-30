@@ -194,25 +194,25 @@ def simschweiz():
                 [0.01,0.01]
                 );
     # End of the full lockdown in days from the beginning of the simulation
-    start_full_quarantine=20
+    end_full_quarantine=20
     # End of the half lockdown (where no risk people start to move again) in days from the beginning of the simulation
-    end_fullquarantine=150
+    start_forced_infection=150
     # End of the forced infection period for people at no risk in days from the beginning of the simulation
     forced_infection_end=330
     # Start of normalized life again in days from the beginning of the simulation
     normal_live_start=400
     # Full Quarantine time.
-    for i in range(1,start_full_quarantine):
+    for i in range(1,end_full_quarantine):
         sim.nextday()
     
     # Partial Quarantine with people at risk locked away
     sim.R0=np.array([[minimalr0,minimalr0],[minimalr0,2]])
-    for i in range(start_full_quarantine,end_fullquarantine):
+    for i in range(end_full_quarantine,start_forced_infection):
         sim.nextday()
 
     # Open Scools and shops, but keep people at risk away.    
     sim.R0=np.array([[minimalr0,minimalr0],[minimalr0,7]])
-    for i in range(end_fullquarantine,forced_infection_end):
+    for i in range(start_forced_infection,forced_infection_end):
         sim.nextday()
     
     # Start of getting people at risk back to normal live
