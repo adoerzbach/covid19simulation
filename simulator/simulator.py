@@ -264,80 +264,80 @@ def callibrate_modell():
     param=[0.40860697359009757, 0.16699122015846088, 0.13855203934318192, 0.06086240167101946, 0.010299653583900078, 0.6938943761687375, 0.011374521975171213, 0.006236351805599582, 0.00011534076597675795]
     param=[0.41728987177888716, 0.16438198234348486, 0.138032469195645, 0.06162318169190721, 0.01032540271785983, 0.6843533284964174, 0.011602012414674637, 0.00015590879513990158, 0.00011591746980664175]
     param=[0.4225059951761232, 0.16237857693367358, 0.13801090162233315, 0.061825382756833774, 0.010312495964462504, 0.6813592826842452, 0.01166002247674801, 0.0001566883391156011, 0.00011649705715567496]
-    i=0
-    print(param[i])
-    while i<len(param):
-        error = 10.0
-        lasterror=20.0
-        maxiterations=200
-        lastparam=param[i]*.99
-        while (1-error/lasterror)**2 > .000001 and maxiterations>0:
-                sim = simulator(
-                    # RO
-                    [[param[0], param[0]], [param[0],param[0]]],
-                    # time_incubation
-                    [5.2, 5.2],
-                    # time_recover_symtomatic
-                    [15, 15],
-                    # time_recover_hospitalized
-                    [10.5, 10.5],
-                    # time_die_symtpomatic
-                    [15, 15],
-                    # time_die_hospitalized
-                    [10.5, 10.5],
-                    # time_hostpitalize
-                    [4.5, 4.5],
-                    # time_immunisation
-                    [10, 10],
-    
-                    # share_hospitalizations                
-                    [param[1],param[2]],
-                    # share_deaths_symtomatic
-                    [param[3],param[4]],
-                    # share_deaths_hospitalized
-                    [param[5],param[6]],
-                    # share_asymptomatic
-                    [param[7],param[8]],
-    
-                    # count_uninfected
-                    [1600000, 6900000],
-                    # count_infectious
-                    [3000, 5300],
-                    # count_asymptomatic
-                    [3000, 5300],
-                    # count_symptomatic
-                    [1000, 1778],
-                    # count_hostpitalized
-                    [270, 34],
-                    # count_immune
-                    [3000, 5300],
-                    # count_dead
-                    [30, 0],
-                    
-                    # infectious_factor_symtomatic,
-                    [.2, .2],
-                    # infectious_factor_hospitalized
-                    [0.01, 0.01]
-                    );
-                # End of the full lockdown in days from the beginning of the simulation
-                simulation_days = 13
-                # Full Quarantine time.
-                for e in range(1, simulation_days):
-                    sim.nextday_silent()
-                lasterror=error
-                tmpparam=param[i]
-                error=(1-sum(sim.count_dead)/reported_deaths)**2+(1-sum(sim.count_hostpitalized)/reported_hospitalisations)**2+(1-sum(sim.total_reported_cases)/reported_cases)**2
-                if error<lasterror:
-                    param[i]=param[i]*2-lastparam
-                    print("right direction, error=%1.4f, lasterror=%1.5f, param[%d]=%3.5f,lastparam=%3.5f"%(error,lasterror,i,param[i],lastparam))
-                else:
-                    param[i]=(param[i]+lastparam)/2
-                    print("wrong direction, error=%1.4f, lasterror=%1.5f, param[%d]=%3.5f,lastparam=%3.5f"%(error,lasterror,i,param[i],lastparam))
-                lastparam=tmpparam
-                maxiterations-=1
-                print(i,param)
-        i+=1
-    
+    for l in range(0,10):
+        i=0
+        while i<len(param):
+            error = 10.0
+            lasterror=20.0
+            maxiterations=200
+            lastparam=param[i]*.99
+            while (1-error/lasterror)**2 > .000001 and maxiterations>0:
+                    sim = simulator(
+                        # RO
+                        [[param[0], param[0]], [param[0],param[0]]],
+                        # time_incubation
+                        [5.2, 5.2],
+                        # time_recover_symtomatic
+                        [15, 15],
+                        # time_recover_hospitalized
+                        [10.5, 10.5],
+                        # time_die_symtpomatic
+                        [15, 15],
+                        # time_die_hospitalized
+                        [10.5, 10.5],
+                        # time_hostpitalize
+                        [4.5, 4.5],
+                        # time_immunisation
+                        [10, 10],
+        
+                        # share_hospitalizations                
+                        [param[1],param[2]],
+                        # share_deaths_symtomatic
+                        [param[3],param[4]],
+                        # share_deaths_hospitalized
+                        [param[5],param[6]],
+                        # share_asymptomatic
+                        [param[7],param[8]],
+        
+                        # count_uninfected
+                        [1600000, 6900000],
+                        # count_infectious
+                        [3000, 5300],
+                        # count_asymptomatic
+                        [3000, 5300],
+                        # count_symptomatic
+                        [1000, 1778],
+                        # count_hostpitalized
+                        [270, 34],
+                        # count_immune
+                        [3000, 5300],
+                        # count_dead
+                        [30, 0],
+                        
+                        # infectious_factor_symtomatic,
+                        [.2, .2],
+                        # infectious_factor_hospitalized
+                        [0.01, 0.01]
+                        );
+                    # End of the full lockdown in days from the beginning of the simulation
+                    simulation_days = 13
+                    # Full Quarantine time.
+                    for e in range(1, simulation_days):
+                        sim.nextday_silent()
+                    lasterror=error
+                    tmpparam=param[i]
+                    error=(1-sum(sim.count_dead)/reported_deaths)**2+(1-sum(sim.count_hostpitalized)/reported_hospitalisations)**2+(1-sum(sim.total_reported_cases)/reported_cases)**2
+                    if error<lasterror:
+                        param[i]=param[i]*2-lastparam
+                        #print("right direction, error=%1.4f, lasterror=%1.5f, param[%d]=%3.5f,lastparam=%3.5f"%(error,lasterror,i,param[i],lastparam))
+                    else:
+                        param[i]=(param[i]+lastparam)/2
+                        #print("wrong direction, error=%1.4f, lasterror=%1.5f, param[%d]=%3.5f,lastparam=%3.5f"%(error,lasterror,i,param[i],lastparam))
+                    lastparam=tmpparam
+                    maxiterations-=1
+                    #print(i,param)
+            i+=1
+        print(param)
     
 def simschweiz_ausbreitung():
     # Schweiz von 17.3.2020 (Shutdown Schweiz)
