@@ -5,7 +5,7 @@ Created on 20 Mar 2020
 '''
 
 import numpy as np
-
+import random
 
 class simulator:
 
@@ -249,29 +249,25 @@ def callibrate_modell():
     try to minimize to relativ error in hospitalisations and deaths and reported cases
     by changing values for minimalr0, share_hospitalizations share_deaths_xx, share_asymptotic
     '''
-    
-    # Values reported for 30/3/2020
-    reported_deaths = 370
-    reported_hospitalisations = 1980
-    reported_cases = 16026
+    # Start of simulation on 17/03/2020
+    # Values reported for 31/3/2020
+    reported_deaths = [30,38,44,67,83,101,130,150,175,221,248,284,317,371,433]
+    reported_hospitalisations = [304,384,527,601,696,844,923,1044,1123,1437,1592,1701,1770,1980,2007]
+    reported_cases = [2778,3801,5024,6526,7345,7947,9051,10040,11063,12257,13483,14495,15195,16101,16605]
+    simulation_days = 14
     param=[.05,0.3,0.02,.3,0.01,0.2,0.01,0.5,0.5]
-    param=[0.05202000000000001, 0.3015, 0.06038399999999937, 0.15206999999999993, 0.01010025, 0.20808000000000004, 0.010403999999999998, 0.22061249999999977, 0.007537499999988458]
-    param=[0.05306040000000001, 0.298485, 0.11533343999999886, 0.08363850000000059, 0.01015075125, 0.4973111999999992, 0.010612079999999998, 0.15884099999999968, 0.0075751874999884]
-    param=[0.1591811999999999, 0.259681950000001, 0.1384001279999985, 0.05645598749999983, 0.01020150500625, 0.7559130239999964, 0.010824321599999997, 0.14295689999999983, 0.007613063437488342]
-    param=[0.3104033399999987, 0.21228999412500074, 0.1404761299199985, 0.05504458781249985, 0.01025251253128125, 0.7785904147199963, 0.011040808031999997, 0.08005586400000145, 0.007651128754675784]
-    param=[0.3693799745999984, 0.1862844698446878, 0.13942255894559852, 0.05807204014218735, 0.010303775093937657, 0.7396608939839967, 0.011096012072159997, 0.03282290423999955, 0.007689384398449163]
-    param=[0.3943131228854982, 0.17417597930478304, 0.1387254461508705, 0.059669021246097506, 0.010509850595816411, 0.7026778492847976, 0.011317932313603197, 0.006236351805599581, 0.007689384398449163]
-    param=[0.40860697359009757, 0.16699122015846088, 0.13855203934318192, 0.06086240167101946, 0.010299653583900078, 0.6938943761687375, 0.011374521975171213, 0.006236351805599582, 0.00011534076597675795]
-    param=[0.41728987177888716, 0.16438198234348486, 0.138032469195645, 0.06162318169190721, 0.01032540271785983, 0.6843533284964174, 0.011602012414674637, 0.00015590879513990158, 0.00011591746980664175]
-    param=[0.4225059951761232, 0.16237857693367358, 0.13801090162233315, 0.061825382756833774, 0.010312495964462504, 0.6813592826842452, 0.01166002247674801, 0.0001566883391156011, 0.00011649705715567496]
-    for l in range(0,10):
+    random.seed()
+    for l in range(0,30):
         i=0
         while i<len(param):
             error = 10.0
             lasterror=20.0
-            maxiterations=200
-            lastparam=param[i]*.99
-            while (1-error/lasterror)**2 > .000001 and maxiterations>0:
+            maxiterations=1000
+            lastparam=param[i]*(1+(random.randint(0,9)-5)/100)
+            firstchange=False
+            
+            while (1-error/lasterror)**2 > .00000001 and maxiterations>0:
+                    tmperror=0
                     sim = simulator(
                         # RO
                         [[param[0], param[0]], [param[0],param[0]]],
@@ -289,7 +285,7 @@ def callibrate_modell():
                         [4.5, 4.5],
                         # time_immunisation
                         [10, 10],
-        
+                        
                         # share_hospitalizations                
                         [param[1],param[2]],
                         # share_deaths_symtomatic
@@ -320,18 +316,28 @@ def callibrate_modell():
                         [0.01, 0.01]
                         );
                     # End of the full lockdown in days from the beginning of the simulation
-                    simulation_days = 13
+                    
                     # Full Quarantine time.
-                    for e in range(1, simulation_days):
+                    
+                    for e in range(0, simulation_days):
                         sim.nextday_silent()
+                        tmperror=(1-sum(sim.count_dead)/reported_deaths[e])**2+(1-sum(sim.count_hostpitalized)/reported_hospitalisations[e])**2+(1-sum(sim.total_reported_cases)/reported_cases[e])**2
+                        
                     lasterror=error
                     tmpparam=param[i]
-                    error=(1-sum(sim.count_dead)/reported_deaths)**2+(1-sum(sim.count_hostpitalized)/reported_hospitalisations)**2+(1-sum(sim.total_reported_cases)/reported_cases)**2
+                    error=tmperror
                     if error<lasterror:
                         param[i]=param[i]*2-lastparam
                         #print("right direction, error=%1.4f, lasterror=%1.5f, param[%d]=%3.5f,lastparam=%3.5f"%(error,lasterror,i,param[i],lastparam))
-                    else:
-                        param[i]=(param[i]+lastparam)/2
+                    else: 
+                        if firstchange:
+                            param[i]=2*lastparam-param[i]
+                        else:
+                            param[i]=(param[i]+lastparam)/2
+                    if param[i]<0:
+                        param[i]=0.01
+                    if param[i]>1:
+                        param[i]=.99
                         #print("wrong direction, error=%1.4f, lasterror=%1.5f, param[%d]=%3.5f,lastparam=%3.5f"%(error,lasterror,i,param[i],lastparam))
                     lastparam=tmpparam
                     maxiterations-=1
