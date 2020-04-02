@@ -151,7 +151,7 @@ class simulator:
         
 
 def simschweiz():
-        # Schweiz
+    # Schweiz start Simulation 23/03/2020
     minimalr0 = 0.01
     sim = simulator(
                 # RO
@@ -347,7 +347,7 @@ def callibrate_modell():
     
 def simschweiz_ausbreitung():
     # Schweiz von 17.3.2020 (Shutdown Schweiz)
-    minimalr0 = 0.4
+    minimalr0 = 0.1
     sim = simulator(
                 # RO
                 [[minimalr0, minimalr0], [minimalr0, minimalr0]],
@@ -367,7 +367,7 @@ def simschweiz_ausbreitung():
                 [10, 10],
 
                 # share_hospitalizations                
-                [.20, 0.02],
+                [.20, 0.05],
                 # share_deaths_symtomatic
                 [.10, 0.0001],
                 # share_deaths_hospitalized
@@ -378,13 +378,13 @@ def simschweiz_ausbreitung():
                 # count_uninfected
                 [1600000, 6900000],
                 # count_infectious
-                [3000, 5300],
+                [9000, 15900],
                 # count_asymptomatic
-                [3000, 5300],
+                [9000, 15900],
                 # count_symptomatic
                 [1000, 1778],
                 # count_hostpitalized
-                [270, 34],
+                [244, 60],
                 # count_immune
                 [3000, 5300],
                 # count_dead
@@ -518,10 +518,10 @@ def simwuhan():
 
          
 def main():
-    # simschweiz()
+    simschweiz()
     # simwuhan() 
-    callibrate_modell()
-    #simschweiz_ausbreitung()
+    # callibrate_modell()
+    # simschweiz_ausbreitung()
         
     
 if __name__ == '__main__':
