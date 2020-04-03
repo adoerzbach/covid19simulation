@@ -22,5 +22,9 @@ If you specify multiple values in each array, these values represent the paramet
 
 The examples included have parameters defined for a simulation of switzerland and the simulation for the wuhan out break of covid 19 with 2 groups of people defined, the index 0 is for people with high risk of dieing, the index 1, for poeple with low risk of dieing.
 
+### First Results
+
+The simulation done with the simulation starting date 23/03/2020 and the paramters defined on 27/03/2020 seem to reproduce the accurate number of deaths and cases up to 01/04/2020.
+
 
 
