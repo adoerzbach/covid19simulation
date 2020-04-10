@@ -6,6 +6,7 @@ Created on 20 Mar 2020
 
 import numpy as np
 import random
+import datetime
 
 class simulator:
 
@@ -32,7 +33,8 @@ class simulator:
                  count_immune,
                  count_dead,
                  infectious_factor_symtomatic,
-                 infectious_factor_hospitalized
+                 infectious_factor_hospitalized,
+                 simulation_startdate
                  ):
         
         ''' Parameter Description
@@ -61,6 +63,7 @@ class simulator:
         count_dead: number of poeple died
         infectious_factor_symtomatic: factor reducing R0 for people which have symptoms because of self quarantine.
         infectious_factor_hospitalized: factor reducing R0 for people which have been hospitalized
+        simulation_startdate: datetime object for the start of the simulation
         '''
         self.R0 = np.array(R0)
         self.time_incubation = np.array(time_incubation)
@@ -85,6 +88,7 @@ class simulator:
         self.infectious_factor_hostpitalized = np.array(infectious_factor_hospitalized)
         self.max_hospitalisations = 0
         self.day = 0
+        self.simulation_startdate=simulation_startdate;
         self.total_reported_cases = self.count_symptomatic + self.count_hostpitalized
         
     def nextday_silent(self):
@@ -128,12 +132,12 @@ class simulator:
 
     def nextday(self):
         self.nextday_silent()
-        format = ('{"Day":%d,"Infections":%s,"Deaths":%s,"Hospitalizations":%s,"Healed from Hospital":%s,Total Deaths":%s,"Total Infectious People":%s,' + 
+        outformat = ('{"Day":%s,"Infections":%s,"Deaths":%s,"Hospitalizations":%s,"Healed from Hospital":%s,Total Deaths":%s,"Total Infectious People":%s,' + 
                    '"Total Immune People":%s,"Total hospitalized People":%s,"Total Symptomatic People":%s' + 
                    '"Total Asymptomatic People":%s,"Total Unifected People":%s,"Total Population":%s}'
                    )
             
-        print(format % (self.day,
+        print(outformat % ((self.simulation_startdate+datetime.timedelta(days=self.day)).strftime("%x"),
                           self.infections.__str__(),
                           (self.deaths_hospitalized + self.deaths_symptomatic).__str__(),
                           self.hospitalisations.__str__(),
@@ -198,8 +202,11 @@ def simschweiz():
                 # infectious_factor_symtomatic,
                 [.2, .2],
                 # infectious_factor_hospitalized
-                [0.01, 0.01]
+                [0.01, 0.01],
+                #Startdate
+                datetime.datetime(2020,3,23)
                 );
+    # 
     # End of the full lockdown in days from the beginning of the simulation
     end_full_quarantine = 20
     # End of the half lockdown (where no risk people start to move again) in days from the beginning of the simulation
@@ -313,7 +320,9 @@ def callibrate_modell():
                         # infectious_factor_symtomatic,
                         [.2, .2],
                         # infectious_factor_hospitalized
-                        [0.01, 0.01]
+                        [0.01, 0.01],
+                        # Startdate
+                        datetime.datetime(2020,3,17)
                         );
                     # End of the full lockdown in days from the beginning of the simulation
                     
@@ -393,7 +402,9 @@ def simschweiz_ausbreitung():
                 # infectious_factor_symtomatic,
                 [.2, .2],
                 # infectious_factor_hospitalized
-                [0.01, 0.01]
+                [0.01, 0.01],
+                # startdate
+                datetime.datetime(2020,3,17)
                 );
     # End of the full lockdown in days from the beginning of the simulation
     end_full_quarantine = 33
@@ -489,7 +500,9 @@ def simwuhan():
                 # infectious_factor_symtomatic,
                 [.2, .2],
                 # infectious_factor_hospitalized
-                [0.01, 0.01]
+                [0.01, 0.01],
+                #startdate
+                datetime.datetime(2020,1,7)
                 );
     # on Jan 23, 16 days after the start of the simulation the complete shutdown comes
     start_full_quarantine = 16
