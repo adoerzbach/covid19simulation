@@ -165,7 +165,7 @@ def simschweiz():
                 # time_recover_symtomatic
                 [15, 15],
                 # time_recover_hospitalized
-                [10.5, 10.5],
+                [14, 14],
                 # time_die_symtpomatic
                 [15, 15],
                 # time_die_hospitalized
@@ -176,13 +176,13 @@ def simschweiz():
                 [10, 10],
 
                 # share_hospitalizations                
-                [.10, 0.001],
+                [.25, 0.025],
                 # share_deaths_symtomatic
-                [.10, 0.0001],
+                [.07, 0.0001],
                 # share_deaths_hospitalized
-                [.30, 0.0001],
+                [.15, 0.005],
                 # share_asymptomatic
-                [0.5, .5],
+                [0.6, 0.7],
 
                 # count_uninfected
                 [1600000, 6900000],
@@ -208,7 +208,7 @@ def simschweiz():
                 );
     # 
     # End of the full lockdown in days from the beginning of the simulation
-    end_full_quarantine = 20
+    end_full_quarantine = 39
     # End of the half lockdown (where no risk people start to move again) in days from the beginning of the simulation
     start_forced_infection = 50
     # End of the forced infection period for people at no risk in days from the beginning of the simulation
@@ -227,12 +227,12 @@ def simschweiz():
         sim.nextday()
 
     # Open Scools and shops, but keep people at risk away.    
-    sim.R0 = np.array([[minimalr0, minimalr0], [minimalr0, 5]])
+    sim.R0 = np.array([[minimalr0, minimalr0], [minimalr0, 2.5]])
     for i in range(start_forced_infection, forced_infection_end):
         sim.nextday()
     
     # Start of getting people at risk back to normal live
-    sim.R0 = np.array([[.7, .7], [.7, 2.5]])
+    sim.R0 = np.array([[.7, .7], [.7, 2.0]])
     for i in range(forced_infection_end, normal_live_start):
         sim.nextday()
     
