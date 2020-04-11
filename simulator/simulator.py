@@ -218,22 +218,22 @@ def simschweiz():
     # End of simulation in days from the beginning of the simulation
     end_of_simulation = 350
     # Full Quarantine time.
-    for i in range(1, end_full_quarantine):
+    for i in range(1, min([end_full_quarantine,end_of_simulation])):
         sim.nextday()
     
     # Partial Quarantine with people at risk locked away
     sim.R0 = np.array([[minimalr0, minimalr0], [minimalr0, 2]])
-    for i in range(end_full_quarantine, start_forced_infection):
+    for i in range(end_full_quarantine,min([end_of_simulation, start_forced_infection])):
         sim.nextday()
 
     # Open Scools and shops, but keep people at risk away.    
     sim.R0 = np.array([[minimalr0, minimalr0], [minimalr0, 2.5]])
-    for i in range(start_forced_infection, forced_infection_end):
+    for i in range(start_forced_infection, min([end_of_simulation,forced_infection_end])):
         sim.nextday()
     
     # Start of getting people at risk back to normal live
     sim.R0 = np.array([[.7, .7], [.7, 2.0]])
-    for i in range(forced_infection_end, normal_live_start):
+    for i in range(forced_infection_end, min([end_of_simulation,normal_live_start])):
         sim.nextday()
     
     # This simulates a better methods of cure in hospitals.
