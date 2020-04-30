@@ -11,7 +11,7 @@ import random
 
 def simschweiz():
     # Schweiz start Simulation 23/03/2020
-    minimalr0 = 0.01
+    minimalr0 = 0.015
     sim = simulator(
                 # RO
                 [[minimalr0, minimalr0], [minimalr0, minimalr0]],
@@ -71,7 +71,7 @@ def simschweiz():
     # Start of normalized life again in days from the beginning of the simulation
     normal_live_start = 290
     # End of simulation in days from the beginning of the simulation
-    end_of_simulation = 350
+    end_of_simulation = 50
     # Full Quarantine time.
     for i in range(1, min([end_full_quarantine,end_of_simulation])):
         sim.nextday()
@@ -113,10 +113,10 @@ def callibrate_modell():
     '''
     # Start of simulation on 17/03/2020
     # Values reported for 31/3/2020
-    reported_deaths = [30,38,44,67,83,101,130,150,175,221,248,284,317,371,433]
-    reported_hospitalisations = [304,384,527,601,696,844,923,1044,1123,1437,1592,1701,1770,1980,2007]
-    reported_cases = [2778,3801,5024,6526,7345,7947,9051,10040,11063,12257,13483,14495,15195,16101,16605]
-    simulation_days = 14
+    reported_deaths = [47,53,75,91,110,137,158,190,233,267,307,343,399,469,526,579,639,711,758,812,866,932,984,1042,1083,1132,1163,1209,1261,1302,1327]
+    reported_hospitalisations = [459,660,766,869,1060,1166,1306,1409,1558,1732,1811,1920,2120,2163,2261,2330,2326,2314,2304,2325,2259,2154,2089,2049,1966,1930,1924,1888,1769,1706,1629]
+    reported_cases = [4116,5388,6516,7326,7939,9187,10185,11210,12452,13749,14662,15416,16449,17442,18451,19552,20476,21088,21572,22213,22842,23605,24263,24762,25229,25556,25779,26083,26387,26721,26929]
+    simulation_days = 28
     param=[.05,0.3,0.02,.3,0.01,0.2,0.01,0.5,0.5]
     random.seed()
     for l in range(0,30):
@@ -177,7 +177,7 @@ def callibrate_modell():
                         # infectious_factor_hospitalized
                         [0.01, 0.01],
                         # Startdate
-                        datetime.datetime(2020,3,17)
+                        datetime(2020,3,17)
                         );
                     # End of the full lockdown in days from the beginning of the simulation
                     
@@ -259,7 +259,7 @@ def simschweiz_ausbreitung():
                 # infectious_factor_hospitalized
                 [0.01, 0.01],
                 # startdate
-                datetime.datetime(2020,3,17)
+                datetime(2020,3,17)
                 );
     # End of the full lockdown in days from the beginning of the simulation
     end_full_quarantine = 33
@@ -357,7 +357,7 @@ def simwuhan():
                 # infectious_factor_hospitalized
                 [0.01, 0.01],
                 #startdate
-                datetime.datetime(2020,1,7)
+                datetime(2020,1,7)
                 );
     # on Jan 23, 16 days after the start of the simulation the complete shutdown comes
     start_full_quarantine = 16
