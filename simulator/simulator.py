@@ -6,6 +6,7 @@ Created on 20 Mar 2020
 
 import numpy as np
 import datetime
+import json
 
 class simulator:
 
@@ -127,15 +128,12 @@ class simulator:
         self.total_reported_cases = self.total_reported_cases + self.fall_ills
         
         
-        # print(json.dumps(self,default=lambda o: o.json()))
-
     def nextday(self):
         self.nextday_silent()
         outformat = ('{"Day":%s,"Infections":%s,"Deaths":%s,"Hospitalizations":%s,"Healed from Hospital":%s,Total Deaths":%s,"Total Infectious People":%s,' + 
                    '"Total Immune People":%s,"Total hospitalized People":%s,"Total Symptomatic People":%s' + 
                    '"Total Asymptomatic People":%s,"Total Unifected People":%s,"Total Population":%s}'
                    )
-            
         print(outformat % ((self.simulation_startdate+datetime.timedelta(days=self.day)).strftime("%x"),
                           self.infections.__str__(),
                           (self.deaths_hospitalized + self.deaths_symptomatic).__str__(),
@@ -152,6 +150,40 @@ class simulator:
                           )
         )
         
-
-
+    def nextday_json(self):
+        self.nextday_silent()
+        print(self.tojson())
+        
+    def tojson(self):
+        return json.dumps(self.todict())
+    
+    def todict(self):
+        return {
+             "Day": (self.simulation_startdate+datetime.timedelta(days=self.day)).strftime("%x"),
+             "R0":self.R0.tolist(),
+             "time_incubation":self.time_incubation.tolist(),
+             "time_recover_symtomatic":self.time_recover_symtomatic.tolist(),
+             "time_recover_hospitalized":self.time_recover_hospitalized.tolist(),
+             "time_die_symtpomatic":self.time_die_symtpomatic.tolist(),
+             "time_die_hospitalized":self.time_die_hospitalized.tolist(),
+             "time_hostpitalize":self.time_hostpitalize.tolist(),
+             "time_immunisation":self.time_immunisation.tolist(),
+             "share_hospitalizations":self.share_hospitalizations.tolist(),
+             "share_deaths_symtomatic":self.share_deaths_symtomatic.tolist(),
+             "share_deaths_hospitalized":self.share_deaths_hospitalized.tolist(),
+             "share_asymptomatic":self.share_asymptomatic.tolist(),
+             "count_uninfected":self.count_uninfected.tolist(),
+             "count_infectious":self.count_infectious.tolist(),
+             "count_asymptomatic":self.count_asymptomatic.tolist(),
+             "count_symptomatic":self.count_symptomatic.tolist(),
+             "count_hostpitalized":self.count_hostpitalized.tolist(),
+             "count_immune":self.count_immune.tolist(),
+             "count_dead":self.count_dead.tolist(),
+             "infectious_factor_symtomatic":self.infectious_factor_symtomatic.tolist(),
+             "infectious_factor_hostpitalized":self.infectious_factor_hostpitalized.tolist(),
+             "stay_healthies":self.stay_healthies.tolist(),
+             "immunized":self.immunized.tolist(),
+             "total_reported_cases ":self.total_reported_cases .tolist(),
+             "fall_ills":self.fall_ills.tolist()
+        }
 

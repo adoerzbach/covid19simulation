@@ -5,13 +5,14 @@ Created on 11 Apr 2020
 '''
 
 import numpy as np
+import json
 from datetime import datetime
 from simulator import simulator
 import random
-
+r=dict()
 def simschweiz():
     # Schweiz start Simulation 23/03/2020
-    minimalr0 = 0.015
+    minimalr0 = 0.1
     sim = simulator(
                 # RO
                 [[minimalr0, minimalr0], [minimalr0, minimalr0]],
@@ -63,26 +64,26 @@ def simschweiz():
                 );
     # 
     # End of the full lockdown in days from the beginning of the simulation
-    end_full_quarantine = 39
+    end_full_quarantine = 45
     # End of the half lockdown (where no risk people start to move again) in days from the beginning of the simulation
-    start_forced_infection = 50
+    start_forced_infection = 100
     # End of the forced infection period for people at no risk in days from the beginning of the simulation
-    forced_infection_end = 180
+    forced_infection_end = 800
     # Start of normalized life again in days from the beginning of the simulation
-    normal_live_start = 290
+    normal_live_start = 10000
     # End of simulation in days from the beginning of the simulation
-    end_of_simulation = 50
+    end_of_simulation = 3000
     # Full Quarantine time.
     for i in range(1, min([end_full_quarantine,end_of_simulation])):
         sim.nextday()
     
     # Partial Quarantine with people at risk locked away
-    sim.R0 = np.array([[minimalr0, minimalr0], [minimalr0, 2]])
+    sim.R0 = np.array([[minimalr0, minimalr0], [minimalr0, 1.2]])
     for i in range(end_full_quarantine,min([end_of_simulation, start_forced_infection])):
-        sim.nextday()
+        sim.nextday()        
 
     # Open Scools and shops, but keep people at risk away.    
-    sim.R0 = np.array([[minimalr0, minimalr0], [minimalr0, 2.5]])
+    sim.R0 = np.array([[minimalr0, minimalr0*2], [minimalr0*2, 1.5]])
     for i in range(start_forced_infection, min([end_of_simulation,forced_infection_end])):
         sim.nextday()
     
