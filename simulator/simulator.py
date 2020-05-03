@@ -90,6 +90,7 @@ class simulator:
         self.day = 0
         self.simulation_startdate=simulation_startdate;
         self.total_reported_cases = self.count_symptomatic + self.count_hostpitalized
+        self.result=dict()
         
     def nextday_silent(self):
         self.healed_hospital = self.count_hostpitalized * (1 - self.share_deaths_hospitalized) / self.time_recover_hospitalized
@@ -126,7 +127,8 @@ class simulator:
             
         self.day += 1
         self.total_reported_cases = self.total_reported_cases + self.fall_ills
-        
+        self.result[self.day]=self.todict()
+
         
     def nextday(self):
         self.nextday_silent()
@@ -183,7 +185,19 @@ class simulator:
              "infectious_factor_hostpitalized":self.infectious_factor_hostpitalized.tolist(),
              "stay_healthies":self.stay_healthies.tolist(),
              "immunized":self.immunized.tolist(),
-             "total_reported_cases ":self.total_reported_cases .tolist(),
+             "total_reported_cases":self.total_reported_cases .tolist(),
              "fall_ills":self.fall_ills.tolist()
         }
-
+    def tocsv(self,columns):
+        line="Day,"
+        for c in columns:
+            line=line+"%s,"%c
+        print(line)    
+        
+        for k in self.result:
+            line="%s,"%(self.simulation_startdate+datetime.timedelta(days=k)).strftime("%x")
+            for c in columns:
+                line=line+"%s,"%sum(self.result[k][c])   
+            print(line)
+                
+       
