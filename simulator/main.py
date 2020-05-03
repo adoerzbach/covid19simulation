@@ -107,7 +107,7 @@ def simschweiz():
     #print(json.dumps(sim.result,indent=4))
     sim.tocsv(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"])
         
-    print("Max Hospitalization %d after %d days" % (sim.max_hospitalisations, sim.max_day))
+    #print("Max Hospitalization %d after %d days" % (sim.max_hospitalisations, sim.max_day))
 
 def callibrate_modell():
     
