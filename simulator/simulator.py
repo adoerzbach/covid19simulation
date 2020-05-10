@@ -188,14 +188,14 @@ class simulator:
              "total_reported_cases":self.total_reported_cases .tolist(),
              "fall_ills":self.fall_ills.tolist()
         }
-    def tocsv(self,columns):
+    def tocsv(self,columns,timeformat="%x"):
         line="Day,"
         for c in columns:
             line=line+"%s,"%c
         print(line)    
         
         for k in self.result:
-            line="%s,"%(self.simulation_startdate+datetime.timedelta(days=k)).strftime("%x")
+            line="%s,"%(self.simulation_startdate+datetime.timedelta(days=k)).strftime(timeformat)
             for c in columns:
                 line=line+"%s,"%sum(self.result[k][c])   
             print(line)

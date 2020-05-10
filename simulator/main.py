@@ -67,13 +67,13 @@ def simschweiz():
     # End of the full lockdown in days from the beginning of the simulation
     end_full_quarantine = 45
     # End of the half lockdown (where no risk people start to move again) in days from the beginning of the simulation
-    start_forced_infection = 100
+    start_forced_infection = 180
     # End of the forced infection period for people at no risk in days from the beginning of the simulation
     forced_infection_end = 800
     # Start of normalized life again in days from the beginning of the simulation
     normal_live_start = 10000
     # End of simulation in days from the beginning of the simulation
-    end_of_simulation = 3000
+    end_of_simulation = 500
     # Full Quarantine time.
     for i in range(1, min([end_full_quarantine,end_of_simulation])):
         nextday()
@@ -105,8 +105,7 @@ def simschweiz():
         nextday()
 
     #print(json.dumps(sim.result,indent=4))
-    sim.tocsv(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"])
-        
+    sim.tocsv(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"],timeformat="%d.%m.%Y")
     #print("Max Hospitalization %d after %d days" % (sim.max_hospitalisations, sim.max_day))
 
 def callibrate_modell():
