@@ -79,12 +79,12 @@ def simschweiz_2nd_wave():
         nextday()
     
     # Partial Quarantine with people at risk locked away
-    sim.R0 = np.array([[minimalr0/4.5, minimalr0/6], [minimalr0/6, minimalr0*.9]])
+    sim.R0 = np.array([[minimalr0/4.5, minimalr0/6], [minimalr0/6, .8]])
     for i in range(end_full_quarantine,min([end_of_simulation, start_forced_infection])):
         nextday()        
 
     # Open Scools and shops, but keep people at risk away.    
-    sim.R0 = np.array([[minimalr0/2, minimalr0/3], [minimalr0/3, minimalr0]])
+    sim.R0 = np.array([[minimalr0/2, minimalr0/3], [minimalr0/3, minimalr0*.8]])
     for i in range(start_forced_infection, min([end_of_simulation,forced_infection_end])):
         nextday()
     
