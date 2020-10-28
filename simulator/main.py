@@ -12,7 +12,7 @@ import random
 r=dict()
 def simschweiz_2nd_wave():
     # Schweiz start Simulation 25/07/2020
-    minimalr0 = 1.75
+    minimalr0 = 1.78
     sim = simulator(
                 # RO
                 [[minimalr0/4.5, minimalr0/6], [minimalr0/6, minimalr0]],
@@ -32,7 +32,7 @@ def simschweiz_2nd_wave():
                 [10, 10],
 
                 # share_hospitalizations                
-                [.06, 0.003],
+                [.061, 0.006],
                 # share_deaths_symtomatic
                 [.01, 0.00001],
                 # share_deaths_hospitalized
@@ -53,7 +53,7 @@ def simschweiz_2nd_wave():
                 # count_immune
                 [30000, 150000],
                 # count_dead
-                [0, 0],
+                [0, 1693],
                 
                 # infectious_factor_symtomatic,
                 [.2, .2],
@@ -65,9 +65,9 @@ def simschweiz_2nd_wave():
     nextday=sim.nextday_silent
     # 
     # End of the full lockdown in days from the beginning of the simulation
-    end_full_quarantine = 95
+    end_full_quarantine = 99
     # End of the half lockdown (where no risk people start to move again) in days from the beginning of the simulation
-    start_forced_infection = 120
+    start_forced_infection = 150
     # End of the forced infection period for people at no risk in days from the beginning of the simulation
     forced_infection_end = 300
     # Start of normalized life again in days from the beginning of the simulation
@@ -79,7 +79,7 @@ def simschweiz_2nd_wave():
         nextday()
     
     # Partial Quarantine with people at risk locked away
-    sim.R0 = np.array([[minimalr0/4.5, minimalr0/6], [minimalr0/6, minimalr0*.8]])
+    sim.R0 = np.array([[minimalr0/4.5, minimalr0/6], [minimalr0/6, minimalr0*.9]])
     for i in range(end_full_quarantine,min([end_of_simulation, start_forced_infection])):
         nextday()        
 
