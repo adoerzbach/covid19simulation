@@ -27,4 +27,6 @@ The examples included have parameters defined for a simulation of switzerland an
 The simulation done with the simulation starting date 23/03/2020 and the paramters defined on 27/03/2020 seem to reproduce the accurate number of deaths and cases up to 01/04/2020 for Switzerland (Schweiz).
 
 
+### Second Wave Results
 
+This simulation done for switzerland with starting date 26/07/2020. The most recent values of the federal office of public health (https://www.bag.admin.ch/) and some additional data of studies of https://www.corona-immunitas.ch/ were used to create the model.
