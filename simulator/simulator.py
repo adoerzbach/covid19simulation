@@ -201,3 +201,15 @@ class simulator:
             print(line)
                 
        
+    def tocsvdetail(self,columns,timeformat="%x"):
+        line="Day,"
+        for c in columns:
+            line=line+"%s,"%c
+        print(line)    
+        
+        for k in self.result:
+            line="%s,"%(self.simulation_startdate+datetime.timedelta(days=k)).strftime(timeformat)
+            for c in columns:
+                for d in self.result[k][c]:
+                    line=line+"%s,"%d   
+            print(line)
