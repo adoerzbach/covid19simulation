@@ -12,7 +12,7 @@ import random
 r=dict()
 def simschweiz_2nd_wave():
     # Schweiz start Simulation 25/07/2020
-    minimalr0 = 1.78
+    minimalr0 = 1.85
     sim = simulator(
                 # RO
                 [[minimalr0/4.5, minimalr0/6], [minimalr0/6, minimalr0]],
@@ -42,18 +42,18 @@ def simschweiz_2nd_wave():
 
                 # count_uninfected
                 [1100000, 7300000],
-                # count_infectious
-                [200, 1000],
+                # count_infectious 
+                [140, 2000],
                 # count_asymptomatic
-                [600, 6000],
+                [270, 5070],
                 # count_symptomatic
-                [100, 900],
+                [27, 507],
                 # count_hostpitalized
                 [80, 30],
                 # count_immune
                 [30000, 150000],
                 # count_dead
-                [0, 1693],
+                [1518, 177],
                 
                 # infectious_factor_symtomatic,
                 [.2, .2],
@@ -64,48 +64,38 @@ def simschweiz_2nd_wave():
                 );
     nextday=sim.nextday_silent
     # 
-    # End of the full lockdown in days from the beginning of the simulation
-    end_full_quarantine = 99
-    # End of the half lockdown (where no risk people start to move again) in days from the beginning of the simulation
-    start_forced_infection = 150
-    # End of the forced infection period for people at no risk in days from the beginning of the simulation
-    forced_infection_end = 300
+    # Start of soft lockdown in days from the beginning of the simulation
+    start_of_soft_lockdown = 99
+    # End of the soft lockdown some christmas celebrating
+    start_of_normalization_for_christmas = 150
     # Start of normalized life again in days from the beginning of the simulation
-    normal_live_start = 10000
-    # End of simulation in days from the beginning of the simulation
+    start_of_normal_live = 200
+    # End of Simulation
     end_of_simulation = 900
-    # Full Quarantine time.
-    for i in range(1, min([end_full_quarantine,end_of_simulation])):
+    # Quite Normal life before soft lockdown on end of Oct 2020
+    for i in range(1, min([start_of_soft_lockdown,end_of_simulation])):
         nextday()
     
-    # Partial Quarantine with people at risk locked away
+    # Start of soft lockdown in days from the beginning of the simulation
     sim.R0 = np.array([[minimalr0/4.5, minimalr0/6], [minimalr0/6, .8]])
-    for i in range(end_full_quarantine,min([end_of_simulation, start_forced_infection])):
+    for i in range(start_of_soft_lockdown,min([end_of_simulation, start_of_normalization_for_christmas])):
         nextday()        
 
-    # Open Scools and shops, but keep people at risk away.    
-    sim.R0 = np.array([[minimalr0/2, minimalr0/3], [minimalr0/3, minimalr0*.8]])
-    for i in range(start_forced_infection, min([end_of_simulation,forced_infection_end])):
+    # End of the soft lockdown some christmas celebrating.    
+    sim.R0 = np.array([[minimalr0/2, minimalr0/2], [minimalr0/2, 1.4]])
+    for i in range(start_of_normalization_for_christmas, min([end_of_simulation,start_of_normal_live])):
         nextday()
     
-    # Start of getting people at risk back to normal live
+    # Start of normalized life again in days from the beginning of the simulation
     sim.R0 = np.array([[1.5, 1.5], [1.5, 2.5]])
-    for i in range(forced_infection_end, min([end_of_simulation,normal_live_start])):
-        nextday()
-    
     # This simulates a better methods of cure in hospitals.
-    sim.share_deaths_hospitalized[0] = .1     
-    # Start of normal live with minor safety precautions of people at risk    
-    sim.R0 = np.array([[1.5, 1.5], [1.5, 2.5]])
-    for i in range(normal_live_start, end_of_simulation):
-        # This simulates the open boarders and imported infections
-        # Hopefully the can be kept as low as this, which means only one person infected is
-        # traveling to Switzerland without being caught at the border
-        sim.count_infectious = sim.count_infectious + np.array([1 / 100, 1 / 7])
+    sim.share_deaths_hospitalized[0] = .06     
+    for i in range(start_of_normal_live, end_of_simulation):
         nextday()
-
-    #print(json.dumps(sim.result,indent=4))
-    sim.tocsv(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"],timeformat="%d.%m.%Y")
+    
+        #print(json.dumps(sim.result,indent=4))
+    sim.tocsvdetail(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"],timeformat="%d.%m.%Y")
+    #sim.tocsv(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"],timeformat="%d.%m.%Y")
     #print("Max Hospitalization %d after %d days" % (sim.max_hospitalisations, sim.max_day))
 
 def simschweiz():
