@@ -12,10 +12,10 @@ import random
 r=dict()
 def simschweiz_2nd_wave():
     # Schweiz start Simulation 25/07/2020
-    minimalr0 = 1.85
+    minimalr0 = 1.75
     sim = simulator(
                 # RO
-                [[minimalr0/4.5, minimalr0/6], [minimalr0/6, minimalr0]],
+                [[minimalr0/3, minimalr0/4], [minimalr0/4, minimalr0]],
                 # time_incubation
                 [5.2, 5.2],
                 # time_recover_symtomatic
@@ -34,11 +34,11 @@ def simschweiz_2nd_wave():
                 # share_hospitalizations                
                 [.061, 0.006],
                 # share_deaths_symtomatic
-                [.01, 0.00001],
+                [.010, 0.00003],
                 # share_deaths_hospitalized
-                [.10, 0.0005],
+                [.09, 0.0012],
                 # share_asymptomatic
-                [0.9, 0.92],
+                [0.90, 0.92],
 
                 # count_uninfected
                 [1100000, 7300000],
@@ -56,7 +56,7 @@ def simschweiz_2nd_wave():
                 [1518, 177],
                 
                 # infectious_factor_symtomatic,
-                [.2, .2],
+                [.4, .4],
                 # infectious_factor_hospitalized
                 [0.01, 0.01],
                 #Startdate
@@ -71,7 +71,7 @@ def simschweiz_2nd_wave():
     # Start of normalized life again in days from the beginning of the simulation
     start_of_normal_live = 200
     # End of Simulation
-    end_of_simulation = 900
+    end_of_simulation = 600
     # Quite Normal life before soft lockdown on end of Oct 2020
     for i in range(1, min([start_of_soft_lockdown,end_of_simulation])):
         nextday()
@@ -94,8 +94,8 @@ def simschweiz_2nd_wave():
         nextday()
     
         #print(json.dumps(sim.result,indent=4))
-    sim.tocsvdetail(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"],timeformat="%d.%m.%Y")
-    #sim.tocsv(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"],timeformat="%d.%m.%Y")
+    #sim.tocsvdetail(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"],timeformat="%d.%m.%Y")
+    sim.tocsv(["count_dead","count_immune","count_hostpitalized","immunized","total_reported_cases","fall_ills","stay_healthies"],timeformat="%d.%m.%Y")
     #print("Max Hospitalization %d after %d days" % (sim.max_hospitalisations, sim.max_day))
 
 def simschweiz():
