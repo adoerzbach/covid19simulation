@@ -197,7 +197,7 @@ class simulator:
         for k in self.result:
             line="%s,"%(self.simulation_startdate+datetime.timedelta(days=k)).strftime(timeformat)
             for c in columns:
-                line=line+"%s,"%sum(self.result[k][c])   
+                line=line+"%0.2f,"%sum(self.result[k][c])
             print(line)
                 
        
@@ -211,5 +211,5 @@ class simulator:
             line="%s,"%(self.simulation_startdate+datetime.timedelta(days=k)).strftime(timeformat)
             for c in columns:
                 for d in self.result[k][c]:
-                    line=line+"%s,"%d   
+                    line=line+"%0.2f,"%d   
             print(line)
